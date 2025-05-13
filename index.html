@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>520纪念 · 致小玉</title>
+  <style>
+    /* 整体背景浪漫粉色渐变 */
+    body, html {
+      margin:0; padding:0; width:100%; height:100%;
+      background: linear-gradient(to bottom, #ffeef8, #ffd1e0);
+      overflow: hidden;
+      display:flex; flex-direction:column; justify-content:center; align-items:center;
+    }
+    .book {
+      position: relative;
+      width: 300px; height: 400px;
+      perspective: 1000px;
+      margin-bottom: 20px;
+    }
+    .page {
+      position: absolute; width: 100%; height: 100%;
+      background:
+        linear-gradient(135deg, rgba(255,240,248,0.9), rgba(255,228,236,0.9)),
+        radial-gradient(circle at 30% 30%, rgba(255,182,193,0.4) 0%, transparent 60%),
+        radial-gradient(circle at 70% 70%, rgba(255,192,203,0.4) 0%, transparent 60%),
+        repeating-linear-gradient(45deg, rgba(255,182,193,0.1) 0, rgba(255,182,193,0.1) 10px, transparent 10px, transparent 20px);
+      background-blend-mode: overlay;
+      border-radius:6px; box-shadow:0 6px 12px rgba(0,0,0,0.15);
+      display:flex; align-items:center; justify-content:center;
+      backface-visibility:hidden; transform-origin:left; transform-style:preserve-3d;
+      padding:20px; font-family:'Helvetica Neue', Arial, sans-serif; font-size:1em;
+      color:#333;
+    }
+    .page#page1 {
+      background: conic-gradient(from 180deg at 50% 50%, #ff5f6d,#ffc371,#47caff,#ff9a9e);
+      color:#fff;
+      text-shadow:0 2px 8px rgba(0,0,0,0.3);
+    }
+    .page:nth-child(1) { z-index:3; }
+    .page:nth-child(2) { z-index:2; }
+    .page:nth-child(3) { z-index:1; }
+    .page.flipped { transform: rotateY(-180deg); transition: transform 1s ease-in-out; }
+
+    /* Emoji 浮动动画 */
+    .emoji { display:inline-block; animation: floatEmoji 3s ease-in-out infinite; }
+    @keyframes floatEmoji { 0%,100% {transform:translateY(0) scale(1);} 50% {transform:translateY(-10px) scale(1.2);} }
+
+    /* 控件按钮 */
+    .controls { display:flex; gap:10px; }
+    .controls button {
+      padding:10px 20px; font-size:1em; border:2px solid rgba(255,182,193,0.8);
+      border-radius:20px; cursor:pointer;
+      background:linear-gradient(135deg, rgba(255,192,203,0.4), rgba(255,240,248,0.4));
+      color:#fff; backdrop-filter:blur(10px);
+      box-shadow:0 4px 12px rgba(255,182,193,0.4);
+      transition:background 0.3s, transform 0.3s;
+    }
+    .controls button:hover { background:linear-gradient(135deg, rgba(255,182,193,0.6), rgba(255,240,248,0.6)); transform:scale(1.05); }
+
+    /* 浮动桃心 */
+    .floating-heart {
+      position:absolute; font-size:24px; pointer-events:none;
+      user-select:none; animation: floatUp 4s ease-out forwards;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity:1; }
+      100% { transform: translateY(-200px) scale(1.5); opacity:0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="book">
+    <div class="page" id="page1">
+      <h1><span class="emoji">🌟</span> 520纪念 · 致小玉 <span class="emoji">🌟</span></h1>
+    </div>
+    <div class="page" id="page2">
+      <p>妳像是银河里最清澈的一颗星<span class="emoji">✨</span>，悄悄照亮了我的世界<span class="emoji">💖</span>。<br>
+      从初见那一刻起，每一段我们共走的路，每一次彼此的注视<span class="emoji">👀</span>、嬉笑<span class="emoji">😂</span>、陪伴<span class="emoji">🤝</span>，<br>
+      都像风吹过湖面<span class="emoji">🍃</span>，泛起不舍的涟漪。</p>
+    </div>
+    <div class="page" id="page3">
+      <p>妳说过，喜欢静静地听风<span class="emoji">🌬️</span>，我也在风里，听见了妳的名字<span class="emoji">📣</span>。<br>
+      妳像是我生命里的小王子<span class="emoji">👑</span>，我只想做守护妳的小狐狸<span class="emoji">🦊</span>。<br>
+      520不是告白，而是纪念<span class="emoji">📆</span>——纪念那些藏在日常里的喜欢<span class="emoji">❤️</span>，和妳给我的光<span class="emoji">🌟</span>。<br><br>
+      <strong>小玉，谢谢妳曾出现<span class="emoji">🙏</span>。也谢谢我，从未放弃喜欢妳<span class="emoji">❤️</span>。</strong></p>
+    </div>
+  </div>
+  <div class="controls">
+    <button id="prev">Previous</button>
+    <button id="next">Next</button>
+  </div>
+  <script>
+    // 页面翻页
+    const pages = [document.getElementById('page1'), document.getElementById('page2'), document.getElementById('page3')];
+    let current=0;
+    document.getElementById('next').addEventListener('click', () => { if(current<pages.length) pages[current++].classList.add('flipped'); });
+    document.getElementById('prev').addEventListener('click', ()=>{ if(current>0) pages[--current].classList.remove('flipped'); });
+    function autoFlip(){ if(current<pages.length){ pages[current++].classList.add('flipped'); setTimeout(autoFlip,5000);} }
+    // 生成浮动桃心
+    function createFloatingHeart(){ const heart=document.createElement('span'); heart.className='floating-heart'; heart.textContent='❤️'; heart.style.left=Math.random()*100+'vw'; document.body.appendChild(heart); setTimeout(()=>heart.remove(),4000);}  
+    window.onload=()=>{ setTimeout(autoFlip,5000); for(let i=0;i<10;i++) createFloatingHeart(); setInterval(createFloatingHeart,500); };
+  </script>
+</body>
+</html>
